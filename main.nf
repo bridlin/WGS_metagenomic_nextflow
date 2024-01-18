@@ -6,7 +6,7 @@ nextflow.enable.dsl=2
  * given `params.foo` specify on the run command line `--foo some_value`.
  */
 
-params.fastq = "/path/to/reads.fastq.gz"
+params.fastq = "/path/to/*_R{1,2}_*.fastq.gz"
 params.outdir = "results"
 params.kraken2_db = "Kraken2_db/PlusPF"
 //params.kraken2_db_E = "Kraken2_db/EuPathDB48"
