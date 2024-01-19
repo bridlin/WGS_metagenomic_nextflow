@@ -46,6 +46,11 @@ WGS_metagenomic analysis with Kraken2
 
 
 workflow metagenomic_analysis {
+    take:
+        fastq
+
+    main:
+        quality_check_fastq(fastq)
 
     
 }
