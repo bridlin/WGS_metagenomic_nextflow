@@ -13,6 +13,7 @@ process quality_check_fastq {
 
         """
         fastqc ${fastq} --outdir ${outdir}               
-        fastqc ${fastq} --outdir ${outdir}               
+        fastqc ${fastq} --outdir ${outdir} 
+        echo ${fastq}            
         """
 }
