@@ -12,7 +12,7 @@ process quality_check_fastq {
     script:
 
         """
-        fastqc ${fastq}/$sample\L001_R1_001.fastq.gz --outdir ${outdir}               # how do I define the individual samples here?
-        fastqc ${fastq}/$sample\L001_R2_001.fastq.gz --outdir ${outdir}               # how do I define the individual samples here?
+        fastqc ${fastq} --outdir ${outdir}               
+        fastqc ${fastq} --outdir ${outdir}               
         """
 }
