@@ -45,12 +45,16 @@ WGS_metagenomic analysis with Kraken2
 
 
 
-workflow metagenomic_analysis {
-    take:
-        fastq
+workflow  {
+ 
 
     main:
-        quality_check_fastq(fastq)
-
+    Channel.fromFilePairs(params.fastq, checkIfExists: true)
+            .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
+            .set{reads_file}
+        quality_check_fastq(reads_file)
+        // trimming(reads).set{reads_trim}
+        // alig(reads_trim).set{reads_trim_ali}
     
 }
+

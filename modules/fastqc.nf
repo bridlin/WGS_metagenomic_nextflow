@@ -3,17 +3,18 @@
 process quality_check_fastq {
     tag "${id}"
     label 'fastqc'
-    publishDir "${params.output}/${fastqc.baseName}/fastqc", mode: 'copy'
+    publishDir "${params.output}/fastqc", mode: 'copy'
+    
     input:
-        tuple val(id), file(fastq)
+        tuple val(id), file(fastqs)
+    
     output:
-        tuple val(id),  file("${baseName}.html") , file("${baseName}.zip")
+        tuple val(id),  file("${fastqs.baseName}.html"), file("${fastqs.baseName}.zip")
 
     script:
 
         """
-        fastqc ${fastq} --outdir ${outdir}               
-        fastqc ${fastq} --outdir ${outdir} 
-        echo ${fastq}            
+        mkdir fastqc_${id}
+        fastqc -t ${task.cpu} -q ${fastqs} --outdir fastqc_${id}                         
         """
 }
