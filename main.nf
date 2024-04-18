@@ -6,14 +6,13 @@ nextflow.enable.dsl=2
  * given `params.foo` specify on the run command line `--foo some_value`.
  */
 
-params.fastq = "/data/*_R{1,2}_001.fastq.gz"
+params.fastq = "$projectDir/data/*_R{1,2}_001.fastq"
 params.outdir = "results"
-params.kraken2_db = "Kraken2_db/PlusPF"
+//params.kraken2_db = "Kraken2_db/PlusPF"
 //params.kraken2_db_E = "Kraken2_db/EuPathDB48"
-params.kraken_output_dir = "PlusPF"
-params.kraken_output_dir_2 = "EuPathDB48"
+//params.kraken_output_dir = "PlusPF"
+//params.kraken_output_dir_2 = "EuPathDB48"
 params.run = "runX"
-
 
 
 
@@ -23,7 +22,7 @@ params.run = "runX"
 
 
 // ****************************** MODULES ****************************
-include { quality_check_fastq } from "${baseDir}/modules/fastqc.nf"
+include { FASTQC } from "${baseDir}/modules/fastqc.nf"
 
 
 
@@ -49,12 +48,13 @@ workflow  {
  
 
     main:
-    Channel.fromFilePairs(params.fastq, checkIfExists: true)
-            .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
-            .set{reads_file}
-        quality_check_fastq(reads_file)
-        // trimming(reads).set{reads_trim}
-        // alig(reads_trim).set{reads_trim_ali}
+    Channel
+        .fromFilePairs(params.fastq, checkIfExists: true)
+        .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
+        .set{reads_file}
+    fastqc_ch = FASTQC(reads_file)
+    // trimming(reads).set{reads_trim}
+    // alig(reads_trim).set{reads_trim_ali}
     
 }
 
