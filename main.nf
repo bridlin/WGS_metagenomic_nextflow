@@ -22,7 +22,7 @@ params.run = "runX"
 
 
 // ****************************** MODULES ****************************
-include { FASTQC as FASTQC1 } from "${baseDir}/modules/fastqc.nf"
+include { FASTQC as FASTQC_raw; FASTQC as FASTQC_trim  } from "${baseDir}/modules/fastqc.nf"
 include { CUTADAPT } from "${baseDir}/modules/cutadapt.nf"
 include { TRIMMOMATIC } from "${baseDir}/modules/trimmomatic.nf"
 include { FASTQC as FASTQC2 } from "${baseDir}/modules/fastqc.nf"
@@ -53,10 +53,10 @@ workflow  {
         .fromFilePairs(params.fastq, checkIfExists: true)
         .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
         .set{reads_file}
-    fastqc_ch = FASTQC1(reads_file)
+    fastqc_ch = FASTQC_raw(reads_file)
     cutadapt_ch = CUTADAPT(reads_file)  
     trimmomatic_ch = TRIMMOMATIC(cutadapt_ch)
-    fastqc_ch_2 = FASTQC2(trimmomatic_ch) // is overwriting the first fastqc output because it is using the id to genetate the output file name
+    fastqc_ch_2 = FASTQC_trim(trimmomatic_ch) // is overwriting the first fastqc output because it is using the id to genetate the output file name
 
     // alig(reads_trim).set{reads_trim_ali}
     
