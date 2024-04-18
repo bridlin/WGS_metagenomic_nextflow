@@ -25,7 +25,7 @@ params.run = "runX"
 include { FASTQC as FASTQC_raw; FASTQC as FASTQC_trim  } from "${baseDir}/modules/fastqc.nf"
 include { CUTADAPT } from "${baseDir}/modules/cutadapt.nf"
 include { TRIMMOMATIC } from "${baseDir}/modules/trimmomatic.nf"
-include { FASTQC as FASTQC2 } from "${baseDir}/modules/fastqc.nf"
+
 
 
 log.info """

@@ -6,7 +6,7 @@ process FASTQC {
     publishDir "${params.outdir}/fastqc", mode: 'copy'
     
     input:
-        tuple val(id), path(fastqs)
+        tuple val(id), path(fastqs) 
     
     output:
         //tuple val(id),  file("${fastqs.baseName}.html"), file("${fastqs.baseName}.zip")
