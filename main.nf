@@ -8,7 +8,7 @@ nextflow.enable.dsl=2
 
 params.fastq = "$projectDir/data/*_R{1,2}_001.fastq"
 params.outdir = "results"
-//params.kraken2_db = "Kraken2_db/PlusPF"
+params.kraken2_db = "Kraken2_db/PlusPF"
 //params.kraken2_db_E = "Kraken2_db/EuPathDB48"
 //params.kraken_output_dir = "PlusPF"
 //params.kraken_output_dir_2 = "EuPathDB48"
@@ -24,7 +24,7 @@ params.run = "runX"
 // ****************************** MODULES ****************************
 include { FASTQC } from "${baseDir}/modules/fastqc.nf"
 include { CUTADAPT } from "${baseDir}/modules/cutadapt.nf"
-
+include { TRIMMOMATIC } from "${baseDir}/modules/trimmomatic.nf"
 
 
 
@@ -55,7 +55,7 @@ workflow  {
         .set{reads_file}
     fastqc_ch = FASTQC(reads_file)
     cutadapt_ch = CUTADAPT(reads_file)  
-    // trimming(reads).set{reads_trim}
+    trimmomatic_ch = TRIMMOMATIC(cutadapt_ch)
     // alig(reads_trim).set{reads_trim_ali}
     
 }
