@@ -23,6 +23,7 @@ params.run = "runX"
 
 // ****************************** MODULES ****************************
 include { FASTQC } from "${baseDir}/modules/fastqc.nf"
+include { CUTADAPT } from "${baseDir}/modules/cutadapt.nf"
 
 
 
@@ -53,8 +54,10 @@ workflow  {
         .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
         .set{reads_file}
     fastqc_ch = FASTQC(reads_file)
+    cutadapt_ch = CUTADAPT(reads_file)  
     // trimming(reads).set{reads_trim}
     // alig(reads_trim).set{reads_trim_ali}
     
 }
+
 
