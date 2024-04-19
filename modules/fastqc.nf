@@ -10,7 +10,7 @@ process FASTQC {
     
     output:
         //tuple val(id),  file("${fastqs.baseName}.html"), file("${fastqs.baseName}.zip")
-        path "fastqc_${id}_logs"
+        path "fastqc_${id}_logs" emit: fastqc_report
     script:
 
         """
