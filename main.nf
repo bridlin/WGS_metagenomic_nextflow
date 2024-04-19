@@ -56,7 +56,7 @@ workflow  {
     fastqc_ch = FASTQC_raw(reads_file)
     cutadapt_ch = CUTADAPT(reads_file)  
     trimmomatic_ch = TRIMMOMATIC(cutadapt_ch)
-    fastqc_ch_2 = FASTQC_trim(trimmomatic_ch) // is overwriting the first fastqc output because it is using the id to genetate the output file name
+    fastqc_ch_2 = FASTQC_trim(TRIMMOMATIC.out.trimmomatic) // is overwriting the first fastqc output because it is using the id to genetate the output file name
 
     // alig(reads_trim).set{reads_trim_ali}
     

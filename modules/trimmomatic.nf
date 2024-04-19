@@ -10,7 +10,7 @@ process TRIMMOMATIC {
         tuple val(id), path("${id}_R1_trimmed.fastq.gz"), path("${id}_R2_trimmed.fastq.gz")
     
     output:
-        tuple val(id), path("${id}_R1_trimmed_q20.fastq.gz"), path("${id}_R2_trimmed_q20.fastq.gz")
+        tuple val(id), path("${id}_R1_trimmed_q20.fastq.gz"), path("${id}_R2_trimmed_q20.fastq.gz") , emit: trimmomatic
     
     script:
         """
