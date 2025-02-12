@@ -50,14 +50,16 @@ workflow  {
 
     main:
     Channel
-        .fromFilePairs(params.fastq, checkIfExists: true)
+        .fromFilePairs(params.fastq, checkIfExists: true, flat:true )
         .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
         .set{reads_file}
+    reads_file.view()
     fastqc_ch = FASTQC_raw(reads_file)
     cutadapt_ch = CUTADAPT(reads_file)  
     trimmomatic_ch = TRIMMOMATIC(cutadapt_ch)
-    fastqc_ch_2 = FASTQC_trim(TRIMMOMATIC.out.trimmomatic) // is overwriting the first fastqc output because it is using the id to genetate the output file name
-
+    trimmomatic_ch.groupTuple().view()
+    // trimmomatic_ch.view()
+    fastqc_ch_2 = FASTQC_trim(trimmomatic_ch) 
     // alig(reads_trim).set{reads_trim_ali}
     
 }

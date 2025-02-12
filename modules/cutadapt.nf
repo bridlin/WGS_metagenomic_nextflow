@@ -6,10 +6,10 @@ process CUTADAPT {
     publishDir "${params.outdir}/trimmedReads", mode: 'copy'
     
     input:
-        tuple val(id), path(fastqs)
+        tuple val(id), path(fastqs) , path(fastqs)
     
     output:
-        tuple val(id), path("${id}_R1_trimmed.fastq.gz"), path("${id}_R2_trimmed.fastq.gz")
+        tuple val(id), path("${id}_R1_trimmed.fastq.gz"), path("${id}_R2_trimmed.fastq.gz")  , emit: cutadapt
     
     script:
 

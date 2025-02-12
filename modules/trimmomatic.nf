@@ -19,7 +19,7 @@ process TRIMMOMATIC {
         -trimlog ${id}trim \
         ${id}_R1_trimmed.fastq.gz ${id}_R2_trimmed.fastq.gz \
         ${id}_R1_trimmed_q20.fastq.gz  ${id}_R1_trimmed_q20_un.fastq.gz ${id}_R2_trimmed_q20.fastq.gz ${id}_R2_trimmed_q20_un.fastq.gz   \
-        SLIDINGWINDOW:4:20 \
+        SLIDINGWINDOW:4:10 \
         MINLEN:40              
         """
 }
