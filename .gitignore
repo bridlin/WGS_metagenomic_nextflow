@@ -40,3 +40,6 @@ plugins-prod
 sandbox
 wave-tests
 x/*
+data/*
+results/*
+pipeline_report/*
