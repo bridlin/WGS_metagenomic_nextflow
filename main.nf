@@ -8,11 +8,12 @@ nextflow.enable.dsl=2
 
 params.fastq = "$projectDir/data/*_R{1,2}_001.fastq"
 params.outdir = "results"
-params.kraken2_db = "Kraken2_db/PlusPF"
-//params.kraken2_db_E = "Kraken2_db/EuPathDB48"
-//params.kraken_output_dir = "PlusPF"
-//params.kraken_output_dir_2 = "EuPathDB48"
-params.run = "runX"
+params.genome = "data/genome/*.fa"
+// params.kraken2_db = "Kraken2_db/PlusPF"
+// params.kraken2_db_E = "Kraken2_db/EuPathDB48"
+// params.kraken_output_dir = "PlusPF"
+// params.kraken_output_dir_2 = "EuPathDB48"
+// params.run = "runX"
 
 
 
