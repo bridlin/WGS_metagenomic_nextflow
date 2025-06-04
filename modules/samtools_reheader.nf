@@ -12,8 +12,6 @@ process SAMTOOLS_REHEADER {
     """
     samtools reheader -c 'grep -v ^@PG' ${bam} > ${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted_reheadered.bam
     
-    samtools \
-    reheader -c 'grep -v ^@PG' $fastq_directory/$sample\aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted.bam  \
-    > $fastq_directory/$sample\aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted_reheadered.bam &&
+    
     """
 }
