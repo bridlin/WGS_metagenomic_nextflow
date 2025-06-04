@@ -16,7 +16,7 @@ process TRIMMOMATIC {
         """
         trimmomatic PE \
         -threads 1 \
-        -trimlog ${id}trim \
+        -trimlog ${params.report_dir}/${id}trim \
         ${id}_R1_trimmed.fastq.gz ${id}_R2_trimmed.fastq.gz \
         ${id}_R1_trimmed_q20.fastq.gz  ${id}_R1_trimmed_q20_un.fastq.gz ${id}_R2_trimmed_q20.fastq.gz ${id}_R2_trimmed_q20_un.fastq.gz   \
         SLIDINGWINDOW:4:10 \

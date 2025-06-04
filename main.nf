@@ -1,6 +1,8 @@
 #! /usr/bin/env nextflow
 nextflow.enable.dsl=2
 
+
+
 /*
  * Default pipeline parameters. They can be overriden on the command line eg.
  * given `params.foo` specify on the run command line `--foo some_value`.
@@ -8,7 +10,8 @@ nextflow.enable.dsl=2
 
 params.fastq = "$projectDir/data/*_R{1,2}_001.fastq"
 params.outdir = "results"
-params.genome = "data/genome/*.fa"
+params.genome = "$projectDir/data/genome/TriTrypDB-55_TbruceiLister427_2018_Genome"
+params.report_dir = "$projectDir/reports"
 // params.kraken2_db = "Kraken2_db/PlusPF"
 // params.kraken2_db_E = "Kraken2_db/EuPathDB48"
 // params.kraken_output_dir = "PlusPF"
@@ -26,8 +29,11 @@ params.genome = "data/genome/*.fa"
 include { FASTQC as FASTQC_raw; FASTQC as FASTQC_trim  } from "${baseDir}/modules/fastqc.nf"
 include { CUTADAPT } from "${baseDir}/modules/cutadapt.nf"
 include { TRIMMOMATIC } from "${baseDir}/modules/trimmomatic.nf"
-
-
+include { BOWTIE2 } from "${baseDir}/modules/bowtie.nf"
+include { SAMTOOLS_BAM2SAM } from "${baseDir}/modules/samtools_samtobam.nf"
+include { SAMTOOLS_SORT } from "${baseDir}/modules/samtools_sort.nf"
+include { SAMTOOLS_INDEX } from "${baseDir}/modules/samtools_index.nf"
+include { SAMTOOLS_REHEADER } from "${baseDir}/modules/samtools_reheader.nf"
 
 log.info """
 
@@ -39,6 +45,8 @@ WGS_metagenomic analysis with Kraken2
      outdir                  : ${params.outdir}
      run                     : ${params.run}
      Kraken2_db              : ${params.kraken2_db}
+     report_dir              : ${params.report_dir}
+     genome                  : ${params.genome}
 
 
 
@@ -54,15 +62,30 @@ workflow  {
         .fromFilePairs(params.fastq, checkIfExists: true, flat:true )
         .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
         .set{reads_file}
-    reads_file.view()
+    //reads_file.view()
     fastqc_ch = FASTQC_raw(reads_file)
     cutadapt_ch = CUTADAPT(reads_file)  
     trimmomatic_ch = TRIMMOMATIC(cutadapt_ch)
-    trimmomatic_ch.groupTuple().view()
+    //trimmomatic_ch.groupTuple().view()
     // trimmomatic_ch.view()
     fastqc_ch_2 = FASTQC_trim(trimmomatic_ch) 
-    // alig(reads_trim).set{reads_trim_ali}
+    bowtie2_ch = BOWTIE2(trimmomatic_ch)
+   // bowtie2_ch.view()
     
-}
+    sam_input_ch = bowtie2_ch.map { tuple ->
+    def (id, sam, nonhuman1, nonhuman2) = tuple
+    [id, sam]
+    }
+    // sam_input_ch.view()
+    
+    bam_ch = SAMTOOLS_BAM2SAM(sam_input_ch)
+    // bam_ch.view()
 
+    sorted_ch = SAMTOOLS_SORT(bam_ch)
+    sorted_ch.view()
+    index_ch  = SAMTOOLS_INDEX(sorted_ch)
+    index_ch.view()
+    reheader_ch = SAMTOOLS_REHEADER(sorted_ch)
+    reheader_ch.view()
+}
 

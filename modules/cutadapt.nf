@@ -14,11 +14,12 @@ process CUTADAPT {
     script:
 
         """
+        mkdir -p ${params.report_dir} 
         cutadapt  -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA   -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT  \
         -o ${id}_R1_trimmed.fastq.gz \
         -p ${id}_R2_trimmed.fastq.gz  \
         ${id}_R1_001.fastq  ${id}_R2_001.fastq \
         --minimum-length 40 \
-        > ${id}_cutadapt.log                 
+        > ${params.report_dir}/${id}_cutadapt.log                 
         """
 }
