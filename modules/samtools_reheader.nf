@@ -7,7 +7,7 @@ process SAMTOOLS_REHEADER {
     tuple val(id), path(bam)
 
     output:
-    path("${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted_reheadered.bam")
+    tuple val(id), path("${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted_reheadered.bam")
 
     """
     samtools reheader -c 'grep -v ^@PG' ${bam} > ${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted_reheadered.bam
