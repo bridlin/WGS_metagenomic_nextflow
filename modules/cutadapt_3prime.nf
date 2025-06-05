@@ -1,15 +1,15 @@
-/* ****************** cutadapt ****************** */
+/* ****************** cutadapt_3prime ****************** */
 
-process CUTADAPT {
-    tag "CUTADAPT on ${id}"
-    label 'cutadapt'
+process CUTADAPT_3PRIME {
+    tag "CUTADAPT_3PRIME on ${id}"
+    label 'cutadapt_3prime'
     publishDir "${params.outdir}/trimmedReads", mode: 'copy'
     
     input:
         tuple val(id), path(fastqs) , path(fastqs)
     
     output:
-        tuple val(id), path("${id}_R1_trimmed.fastq.gz"), path("${id}_R2_trimmed.fastq.gz")  , emit: cutadapt
+        tuple val(id), path("${id}_R1_trimmed.fastq.gz"), path("${id}_R2_trimmed.fastq.gz")  , emit: cutadapt_3prime
     
     script:
 

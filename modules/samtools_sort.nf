@@ -1,3 +1,5 @@
+/* ****************** samtools_sort ****************** */
+
 process SAMTOOLS_SORT {
     tag "samtools_sort on ${id}"
     label 'samtools_sort'

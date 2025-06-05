@@ -1,3 +1,5 @@
+/* ****************** samtools_index ****************** */
+
 process SAMTOOLS_INDEX {
     tag "samtools_index on ${id}"
     label 'samtools_index'
