@@ -12,10 +12,7 @@ params.fastq = "$projectDir/data/*_R{1,2}_001.fastq"
 params.outdir = "results"
 params.genome = "$projectDir/data/genome/TriTrypDB-55_TbruceiLister427_2018_Genome"
 params.report_dir = "$projectDir/reports"
-// params.kraken2_db = "Kraken2_db/PlusPF"
-// params.kraken2_db_E = "Kraken2_db/EuPathDB48"
-// params.kraken_output_dir = "PlusPF"
-// params.kraken_output_dir_2 = "EuPathDB48"
+
 // params.run = "runX"
 
 

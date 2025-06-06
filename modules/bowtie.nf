@@ -2,6 +2,7 @@
 
 process BOWTIE2 {
     tag "bowtie2 on ${id}"
+    label 'cutadapt_3prime'
     label 'bowtie2'
     publishDir "${params.outdir}/aligned_reads", mode: 'copy'
     
