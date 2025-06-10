@@ -9,8 +9,6 @@ process MULTIQC {
     path(report)
     
     
-    // output:
-    // tuple val(id), val(db_name), path("${id}_${db_name}_k2report"), emit: kraken2
     
     script:
 

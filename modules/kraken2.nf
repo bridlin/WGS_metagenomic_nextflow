@@ -15,7 +15,7 @@ process KRAKEN2 {
     script:
 
         """	           
-        
+        echo "kraken2  of  ${read1} ${read2} on genome ${db_name} " 
         kraken2 \
         --db ${db_path} \
         --threads 8 \

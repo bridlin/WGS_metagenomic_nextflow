@@ -3,17 +3,6 @@ nextflow.enable.dsl=2
 
 
 
-/*
- * Default pipeline parameters. They can be overriden on the command line eg.
- * given `params.foo` specify on the run command line `--foo some_value`.
- */
-
-params.fastq = "$projectDir/data/*_R{1,2}_001.fastq"
-params.outdir = "results"
-params.genome = "$projectDir/data/genome/TriTrypDB-55_TbruceiLister427_2018_Genome"
-params.report_dir = "$projectDir/reports"
-
-// params.run = "runX"
 
 
 
@@ -72,12 +61,28 @@ workflow  {
     //reads_file.view()
     fastqc_ch = FASTQC_raw(reads_file)
     cutadapt_ch = CUTADAPT_3PRIME(reads_file)  
-    trimmomatic_ch = TRIMMOMATIC(cutadapt_ch)
+    trimmomatic_trimmed_reads_ch = TRIMMOMATIC(cutadapt_ch).trimmomatic_trimmed_reads
+    //trimmomatic_report_ch = TRIMMOMATIC(cutadapt_ch).trimmomatic_report
+    
     //trimmomatic_ch.groupTuple().view()
     // trimmomatic_ch.view()
-    fastqc_ch_2 = FASTQC_trim(trimmomatic_ch) 
-    bowtie2_ch = BOWTIE2(trimmomatic_ch)
-   // bowtie2_ch.view()
+    fastqc_ch_2 = FASTQC_trim(trimmomatic_trimmed_reads_ch) 
+    // bowtie2_input_ch = trimmomatic_trimmed_reads_ch.map { id, r1, r2 -> tuple(id, r1, r2, file(params.genome)) }
+    // bowtie2_input_ch.view()
+    genome_index_ch = Channel
+    .fromPath("${params.genome}.*.bt2")
+    .collect()
+    .ifEmpty { error "Bowtie2 index files not found: ${params.genome}.*.bt2" }
+    .map { files -> 
+        def firstFile = files[0].getBaseName()  // e.g., TriTrypDB-55_TbruceiLister427_2018_Genome.1
+        def prefix = firstFile.replaceAll(/\.(1|2|3|4|rev\.1|rev\.2)$/, "")  // strip the .1 or .rev.1 part
+        tuple(prefix, files)
+    }
+   
+    // genome_index_ch.view()
+
+    bowtie2_ch = BOWTIE2(trimmomatic_trimmed_reads_ch,genome_index_ch).bowtie2
+    // bowtie2_ch.view()
     
     sam_input_ch = bowtie2_ch.map { tuple ->
     def (id, sam, nonhuman1, nonhuman2) = tuple

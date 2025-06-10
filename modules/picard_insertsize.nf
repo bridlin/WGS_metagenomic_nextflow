@@ -3,7 +3,8 @@
 process PICARD_INSERTSIZE {
     tag "picard_insertsize on ${id}"
     label 'picard_insertsize'
-    publishDir "${params.outdir}/reports", mode: 'copy'
+    label 'docker_enabled'
+    publishDir "${params.report_dir}", mode: 'copy'
 
     input:
     tuple val(id), path(bam)

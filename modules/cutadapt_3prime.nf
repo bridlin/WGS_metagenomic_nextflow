@@ -15,7 +15,7 @@ process CUTADAPT_3PRIME {
     script:
 
         """
-        mkdir -p ${params.report_dir} 
+         
         cutadapt  -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA   -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT  \
         -o ${id}_R1_trimmed.fastq.gz \
         -p ${id}_R2_trimmed.fastq.gz  \
