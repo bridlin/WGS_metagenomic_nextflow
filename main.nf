@@ -130,7 +130,7 @@ workflow  {
         .set{multiqc_ch}
     
     
-    MULTIQC(multiqc_ch)
+    // MULTIQC(multiqc_ch)
 
     
 
