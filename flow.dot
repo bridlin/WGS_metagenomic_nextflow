@@ -20,75 +20,99 @@ v5 [label="TRIMMOMATIC"];
 v4 -> v5;
 
 v5 [label="TRIMMOMATIC"];
-v6 [label="FASTQC_trim"];
-v5 -> v6;
-
-v6 [label="FASTQC_trim"];
-v7 [shape=point];
-v6 -> v7;
+v7 [label="FASTQC_trim"];
+v5 -> v7 [label="trimmomatic_trimmed_reads_ch"];
 
 v5 [label="TRIMMOMATIC"];
-v8 [label="BOWTIE2"];
-v5 -> v8;
+v6 [shape=point];
+v5 -> v6;
 
-v8 [label="BOWTIE2"];
-v9 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
-v8 -> v9;
+v7 [label="FASTQC_trim"];
+v8 [shape=point];
+v7 -> v8;
 
-v9 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
-v10 [label="SAMTOOLS_BAM2SAM"];
-v9 -> v10 [label="sam_input_ch"];
+v9 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+v10 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+v9 -> v10;
 
-v10 [label="SAMTOOLS_BAM2SAM"];
-v11 [label="SAMTOOLS_SORT"];
+v10 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+v11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
 v10 -> v11;
 
-v11 [label="SAMTOOLS_SORT"];
-v12 [label="SAMTOOLS_INDEX"];
+v11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
+v12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
 v11 -> v12;
 
-v12 [label="SAMTOOLS_INDEX"];
-v13 [shape=point];
-v12 -> v13;
+v12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+v13 [label="BOWTIE2"];
+v12 -> v13 [label="genome_index_ch"];
 
-v11 [label="SAMTOOLS_SORT"];
-v14 [label="SAMTOOLS_REHEADER"];
-v11 -> v14;
+v5 [label="TRIMMOMATIC"];
+v13 [label="BOWTIE2"];
+v5 -> v13 [label="trimmomatic_trimmed_reads_ch"];
 
-v14 [label="SAMTOOLS_REHEADER"];
-v15 [label="PICARD_INSERTSIZE"];
-v14 -> v15;
+v13 [label="BOWTIE2"];
+v15 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+v13 -> v15 [label="bowtie2_ch"];
 
-v8 [label="BOWTIE2"];
-v16 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
-v8 -> v16;
+v13 [label="BOWTIE2"];
+v14 [shape=point];
+v13 -> v14;
 
-v16 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
-v17 [label="CUTADAPT_5PRIME"];
-v16 -> v17 [label="cutadapt5_input_ch"];
+v15 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+v16 [label="SAMTOOLS_BAM2SAM"];
+v15 -> v16 [label="sam_input_ch"];
 
-v17 [label="CUTADAPT_5PRIME"];
-v19 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
-v17 -> v19;
+v16 [label="SAMTOOLS_BAM2SAM"];
+v17 [label="SAMTOOLS_SORT"];
+v16 -> v17;
 
-v18 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.from"];
-v19 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
-v18 -> v19 [label="kraken2_db_ch"];
+v17 [label="SAMTOOLS_SORT"];
+v18 [label="SAMTOOLS_INDEX"];
+v17 -> v18;
 
-v19 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
-v20 [label="KRAKEN2"];
-v19 -> v20;
+v18 [label="SAMTOOLS_INDEX"];
+v19 [shape=point];
+v18 -> v19;
 
-v21 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
-v22 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="view"];
-v21 -> v22;
+v17 [label="SAMTOOLS_SORT"];
+v20 [label="SAMTOOLS_REHEADER"];
+v17 -> v20;
 
-v22 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="view"];
-v23 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
-v22 -> v23;
+v20 [label="SAMTOOLS_REHEADER"];
+v21 [label="PICARD_INSERTSIZE"];
+v20 -> v21;
 
-v23 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
-v24 [label="MULTIQC"];
-v23 -> v24 [label="multiqc_ch"];
+v13 [label="BOWTIE2"];
+v22 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+v13 -> v22 [label="bowtie2_ch"];
+
+v22 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+v23 [label="CUTADAPT_5PRIME"];
+v22 -> v23 [label="cutadapt5_input_ch"];
+
+v23 [label="CUTADAPT_5PRIME"];
+v25 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+v23 -> v25;
+
+v24 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.from"];
+v25 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+v24 -> v25 [label="kraken2_db_ch"];
+
+v25 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+v26 [label="KRAKEN2"];
+v25 -> v26;
+
+v27 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+v28 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="view"];
+v27 -> v28;
+
+v28 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="view"];
+v29 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
+v28 -> v29;
+
+v29 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
+v30 [label="MULTIQC"];
+v29 -> v30 [label="multiqc_ch"];
 
 }

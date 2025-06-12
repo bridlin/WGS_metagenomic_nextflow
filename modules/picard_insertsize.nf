@@ -2,7 +2,7 @@
 
 process PICARD_INSERTSIZE {
     tag "picard_insertsize on ${id}"
-    label 'picard_insertsize'
+    label 'picard'
     label 'docker_enabled'
     publishDir "${params.report_dir}", mode: 'copy'
 

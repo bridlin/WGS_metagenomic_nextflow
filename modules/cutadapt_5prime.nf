@@ -3,7 +3,7 @@
 process CUTADAPT_5PRIME {
     tag "CUTADAPT_5PRIME on ${id}"
     label 'docker_enabled'
-    label 'cutadapt_5prime'
+    label 'cutadapt'
     publishDir "${params.outdir}/multiqc", mode: 'copy'
     
     input:
