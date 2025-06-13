@@ -112,7 +112,7 @@ v29 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
 v28 -> v29;
 
 v29 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
-v30 [label="MULTIQC"];
+v30 [shape=point];
 v29 -> v30 [label="multiqc_ch"];
 
 }
