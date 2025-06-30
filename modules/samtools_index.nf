@@ -2,7 +2,7 @@
 
 process SAMTOOLS_INDEX {
     tag "samtools_index on ${id}"
-    label 'samtools_index'
+    label 'samtools'
     publishDir "${params.outdir}/aligned_reads", mode: 'copy'
 
     input:

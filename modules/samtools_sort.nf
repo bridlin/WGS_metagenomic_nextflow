@@ -2,7 +2,7 @@
 
 process SAMTOOLS_SORT {
     tag "samtools_sort on ${id}"
-    label 'samtools_sort'
+    label 'samtools'
     publishDir "${params.outdir}/aligned_reads", mode: 'copy'
 
     input:

@@ -3,7 +3,7 @@
 
 process SAMTOOLS_BAM2SAM {
     tag "samtools_samtobam on ${id}"
-    label 'samtools_samtobam'
+    label 'samtools'
     publishDir "${params.outdir}/aligned_reads", mode: 'copy'
 
 

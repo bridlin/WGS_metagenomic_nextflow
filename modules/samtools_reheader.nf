@@ -2,7 +2,7 @@
 
 process SAMTOOLS_REHEADER {
     tag "samtools_reheader on ${id}"
-    label 'samtools_reheader'
+    label 'samtools'
     publishDir "${params.outdir}/aligned_reads", mode: 'copy'
 
     input:
