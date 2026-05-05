@@ -54,21 +54,39 @@ workflow  {
  
 
     main:
-    Channel
+
+
+    /*
+     * creating channel with input reads
+     */
+    reads_file_ch = Channel
         .fromFilePairs(params.fastq, checkIfExists: true, flat:true )
         .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
-        .set{reads_file}
-    //reads_file.view()
-    fastqc_ch = FASTQC_raw(reads_file)
-    cutadapt_ch = CUTADAPT_3PRIME(reads_file)  
-    trimmomatic_trimmed_reads_ch = TRIMMOMATIC(cutadapt_ch).trimmomatic_trimmed_reads
-    //trimmomatic_report_ch = TRIMMOMATIC(cutadapt_ch).trimmomatic_report
+        
+    reads_file_ch.view()
     
-    //trimmomatic_ch.groupTuple().view()
-    // trimmomatic_ch.view()
-    fastqc_ch_2 = FASTQC_trim(trimmomatic_trimmed_reads_ch) 
-    // bowtie2_input_ch = trimmomatic_trimmed_reads_ch.map { id, r1, r2 -> tuple(id, r1, r2, file(params.genome)) }
-    // bowtie2_input_ch.view()
+    /*
+     * read qc and trimming
+     */
+
+    fastqc_raw_ch = FASTQC_raw(reads_file_ch)
+    cutadapt_3p_out_ch = CUTADAPT_3PRIME(reads_file_ch)
+    cutadapt_3p_reads_ch = cutadapt_3p_out_ch.cutadapt_3prime
+    cutadapt_3p_report_ch = cutadapt_3p_out_ch.cutadapt_3p_report
+
+    // generating channel with the trimmomatic output 
+    trimmomatic_out = TRIMMOMATIC(cutadapt_3p_reads_ch)
+    // selecting the reads only from the rtimmomatic channel
+    trimmed_reads_ch = trimmomatic_out.trimmomatic_trimmed_reads
+    trimmomatic_report_ch = trimmomatic_out.trimmomatic_report
+    fastqc_trim_ch = FASTQC_trim(trimmed_reads_ch) 
+   
+
+
+    /*
+     * generating channel with human genome for alignemnt
+     */
+    
     genome_index_ch = Channel
     .fromPath("${params.genome}.*.bt2")
     .collect()
@@ -79,58 +97,87 @@ workflow  {
         tuple(prefix, files)
     }
    
-    // genome_index_ch.view()
+    
+    /*
+     * Alignment
+     */
 
-    bowtie2_ch = BOWTIE2(trimmomatic_trimmed_reads_ch,genome_index_ch).bowtie2
+    bowtie2_out_ch = BOWTIE2(trimmed_reads_ch,genome_index_ch).bowtie2
     // bowtie2_ch.view()
     
-    sam_input_ch = bowtie2_ch.map { tuple ->
+
+    /*
+     * samtools processing and picard index size
+     */
+
+
+    sam_input_ch = bowtie2_out_ch.map { tuple ->
     def (id, sam, nonhuman1, nonhuman2) = tuple
     [id, sam]
     }
-    // sam_input_ch.view()
-    
+   
     bam_ch = SAMTOOLS_BAM2SAM(sam_input_ch)
-    // bam_ch.view()
+    sorted_bam_ch = SAMTOOLS_SORT(bam_ch)
+    index_bam_ch  = SAMTOOLS_INDEX(sorted_bam_ch)
+    reheader_bam_ch = SAMTOOLS_REHEADER(sorted_bam_ch)
+    picard_ch = PICARD_INSERTSIZE(reheader_bam_ch)
+    
+    
+    /*
+     * Non‑human reads → 5′ trimming
+     */
 
-    sorted_ch = SAMTOOLS_SORT(bam_ch)
-    // sorted_ch.view()
-    index_ch  = SAMTOOLS_INDEX(sorted_ch)
-    // index_ch.view()
-    reheader_ch = SAMTOOLS_REHEADER(sorted_ch)
-    //reheader_ch.view()
-
-    insert_size_ch = PICARD_INSERTSIZE(reheader_ch)
-    // insert_size_ch.view()
-
-    cutadapt5_input_ch = bowtie2_ch.map { tuple ->
+    nonhuman_reads_ch = bowtie2_out_ch.map { tuple ->
     def (id, sam, nonhuman1, nonhuman2) = tuple
     [id, nonhuman1, nonhuman2]
     }
-    // cutadapt5_input_ch.view()
     
-     // Nonhuman reads trimming
-     // This is the 5' end trimming of nonhuman reads
-     // It is done after bowtie2 alignment to remove the adapter sequences
-     // from the nonhuman reads
-    nonhuman_ch=CUTADAPT_5PRIME(cutadapt5_input_ch)
-    // nonhuman_ch.view()
+    cutadapt_5p_out_ch = CUTADAPT_5PRIME(nonhuman_reads_ch)
+    nonhuman_trimmed_ch = cutadapt_5p_out_ch.cutadapt_5prime
+    cutadapt_5p_report_ch = cutadapt_5p_out_ch.cutadapt_5p_report
+
     
+    
+
+    /*
+     * Kraken2 classification
+     */
+
+
     kraken2_db_ch = Channel.from(params.kraken2_dbs)
-    // kraken2_db_ch.view()
-
-    // nonhuman_ch.combine(kraken2_db_ch).view()
     
-    kraken2_results_ch = nonhuman_ch.combine(kraken2_db_ch) | KRAKEN2
-    // kraken2_results_ch.view() 
-
+    kraken2_results_ch = nonhuman_trimmed_ch
+        .combine(kraken2_db_ch) 
+        | KRAKEN2
+     
+    kraken2_report_ch = kraken2_results_ch.kraken_report
+    kraken2_classification_ch = kraken2_results_ch.kraken_classification
    
-    Channel.fromPath(params.report_dir).view() 
-        .ifEmpty{ exit 1 , "cannot find reports (${params.report_dir}"}
-        .set{multiqc_ch}
     
+
+
     
-    // MULTIQC(multiqc_ch)
+    kraken2_mqc_ch =
+        kraken2_report_ch.map { id, db_name, report_file ->
+            report_file
+        }
+
+
+    
+    all_reports_ch = Channel
+        .empty()
+        .mix(
+            fastqc_raw_ch,
+            cutadapt_3p_report_ch,
+            trimmomatic_report_ch,
+            fastqc_trim_ch,
+            picard_ch,
+            cutadapt_5p_report_ch,
+            kraken2_mqc_ch
+    )
+
+    
+    MULTIQC(all_reports_ch.collect())
 
     
 

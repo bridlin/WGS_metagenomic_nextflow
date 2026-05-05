@@ -3,19 +3,23 @@
 process MULTIQC {
     tag "multiqc"
     label 'multiqc'
-    publishDir "${params.outdir}/kraken2/${db_name}", mode: 'copy'
+    publishDir "${params.outdir}/multiqc", mode: 'copy'
     
     input:
-    path(report)
+    path(report_dir)
     
     
+    output:
+    path("multiqc_report.html")
+    path("multiqc_data")
+
     
     script:
 
         """	           
         multiqc   \
-        ${params.report_dir} \
-        --outdir ${params.outdir}/multiqc
+            ${report_dir} \
+            --outdir .
         """        
 
 

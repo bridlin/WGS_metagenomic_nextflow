@@ -9,8 +9,11 @@ process KRAKEN2 {
     tuple val(id), path(read1), path(read2), val(db_name), path(db_path)
     
     
-    // output:
-    // tuple val(id), val(db_name), path("${id}_${db_name}_k2report"), emit: kraken2
+    
+    output:
+        tuple val(id), val(db_name), path("${id}_${db_name}.k2report"), emit: kraken_report
+        tuple val(id), val(db_name), path("${id}_${db_name}.kraken2"), emit: kraken_classification
+
     
     script:
 
