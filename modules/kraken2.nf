@@ -17,7 +17,14 @@ process KRAKEN2 {
     
     script:
 
-        """	           
+        """	
+
+        
+        echo "DEBUG db_name=${db_name}"
+        echo "DEBUG db_path=${db_path}"
+
+
+
         echo "kraken2  of  ${read1} ${read2} on genome ${db_name} " 
         kraken2 \
         --db ${db_path} \
