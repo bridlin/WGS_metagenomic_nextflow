@@ -3,7 +3,6 @@
 process CUTADAPT_3PRIME {
     tag "CUTADAPT_3PRIME on ${id}"
     label 'cutadapt'
-    label 'docker_enabled'
     publishDir "${params.outdir}/trimmedReads", mode: 'copy'
     publishDir "${params.report_dir}", mode: 'copy' , pattern: "*.log"
 

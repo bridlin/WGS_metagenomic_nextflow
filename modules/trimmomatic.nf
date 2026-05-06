@@ -3,7 +3,6 @@
 
 process TRIMMOMATIC {
     tag "TRIMMOMATIC on ${id}"
-    label 'docker_enabled'
     label 'trimmomatic'
     publishDir "${params.outdir}/trimmedReads", mode: 'copy', pattern: "*.fastq.gz"
     publishDir "${params.report_dir}", mode: 'copy' , pattern: "*.log"

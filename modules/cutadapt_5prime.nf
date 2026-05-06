@@ -2,7 +2,6 @@
 
 process CUTADAPT_5PRIME {
     tag "CUTADAPT_5PRIME on ${id}"
-    label 'docker_enabled'
     label 'cutadapt'
     publishDir "${params.outdir}/multiqc", mode: 'copy'
     publishDir "${params.report_dir}", mode: 'copy' , pattern: "*.log"
