@@ -14,6 +14,8 @@ process PICARD_INSERTSIZE {
     path("${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted_reheadered_insert_size_metrics.txt"), optional: true, emit: report 
     path("${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted_reheadered_insert_size_histogram.pdf") , optional: true, emit: pdf
 
+   
+   script:
     """
     picard \
     CollectInsertSizeMetrics   \

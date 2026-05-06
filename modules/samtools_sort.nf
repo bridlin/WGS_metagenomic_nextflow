@@ -11,6 +11,8 @@ process SAMTOOLS_SORT {
     output:
     tuple val(id), path("${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted.bam")
 
+    
+    script:
     """
     samtools sort ${bam} -o ${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel_sorted.bam 
     

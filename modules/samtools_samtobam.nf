@@ -14,6 +14,8 @@ process SAMTOOLS_BAM2SAM {
     output:
     tuple val(id), path("${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel.bam")
 
+    
+    script:
     """
     samtools view -S  -b ${sam}  > ${id}_aln-pe_Homo_sapiens.GRCh38.dna.toplevel.bam
     """

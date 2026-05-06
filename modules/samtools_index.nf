@@ -11,6 +11,8 @@ process SAMTOOLS_INDEX {
     output:
     tuple val(id), path("${bam}.bai")
 
+    
+    script:
     """
     samtools index ${bam}
 
