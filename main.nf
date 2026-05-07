@@ -147,17 +147,23 @@ workflow  {
     kraken2_db_ch = Channel.from(params.kraken2_dbs)
     kraken2_db_ch.view()
 
-    kraken2_ch = nonhuman_trimmed_ch
-        .combine(kraken2_db_ch)
-
-    kraken2_ch.view()
-
+    
+    kraken2_input_ch =
+            nonhuman_trimmed_ch
+                .combine(kraken2_db_ch)
+                .map { reads, db ->
+                    tuple(
+                        reads[0],
+                        reads[1],
+                        reads[2],
+                        db[0],
+                        db[1]
+                    )
+                }
     kraken2_results_ch = KRAKEN2(kraken2_ch)
      
     kraken2_report_ch = kraken2_results_ch.kraken_report
     kraken2_classification_ch = kraken2_results_ch.kraken_classification
-   
-    
 
 
     
