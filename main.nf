@@ -160,7 +160,8 @@ workflow  {
                         db[1]
                     )
                 }
-    kraken2_results_ch = KRAKEN2(kraken2_ch)
+    
+    kraken2_results_ch = KRAKEN2(kraken2_input_ch)
      
     kraken2_report_ch = kraken2_results_ch.kraken_report
     kraken2_classification_ch = kraken2_results_ch.kraken_classification
