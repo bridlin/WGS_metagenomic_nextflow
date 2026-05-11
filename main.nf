@@ -172,7 +172,7 @@ workflow  {
                     reads[1],   // read1
                     reads[2],   // read2
                     db[0],      // db_name
-                    db[1]       // db_path ✅
+                    db[1]       // db_path 
                 )
             }
 
