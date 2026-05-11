@@ -147,8 +147,8 @@ workflow  {
     
     kraken2_db_ch =
         Channel
-            .from(params.kraken2_dbs)
-            .map { name, path -> tuple(name, file(path)) }
+            .from( params.kraken2_dbs.entrySet() )
+            .map { entry -> tuple(entry.key, file(entry.value)) }
             .ifEmpty { error "No Kraken2 databases defined" }
 
     
