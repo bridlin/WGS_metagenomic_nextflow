@@ -141,7 +141,7 @@ workflow  {
     nonhuman_trimmed_ch = cutadapt_5p_out_ch.cutadapt_5prime
     cutadapt_5p_report_ch = cutadapt_5p_out_ch.cutadapt_5p_report
 
-    
+    cutadapt_5p_out_ch.view()
     
 
     /*
@@ -175,9 +175,7 @@ workflow  {
 
 
     
-    kraken2_input_ch.view { it ->
-        "KRAKEN_INPUT → ${it.class} → $it"
-    }
+    kraken2_input_ch.view()
 
  
     
