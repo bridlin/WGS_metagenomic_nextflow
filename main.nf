@@ -27,7 +27,7 @@ include { MULTIQC } from "${baseDir}/modules/multiqc.nf"
 
 
 
-kraken2_dbs = params.kraken2_dbs.collect { [ it[0], file(it[1]) ] }
+// kraken2_dbs = params.kraken2_dbs.collect { [ it[0], file(it[1]) ] }
 
 
 log.info """
