@@ -172,7 +172,11 @@ workflow  {
                 )
             }
 
-    kraken2_input_ch.view()
+    
+    kraken2_input_ch.view { it ->
+        "KRAKEN_INPUT → ${it.class} → $it"
+    }
+
  
     
     
