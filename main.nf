@@ -129,7 +129,7 @@ workflow  {
 
     nonhuman_reads_ch = bowtie2_out_ch.map { tuple ->
     def (id, sam, nonhuman1, nonhuman2) = tuple
-    [id, nonhuman1, nonhuman2]
+    tuple(id, nonhuman1, nonhuman2)
     }
     
     cutadapt_5p_out_ch = CUTADAPT_5PRIME(nonhuman_reads_ch)
