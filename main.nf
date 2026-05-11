@@ -111,10 +111,12 @@ workflow  {
      */
 
 
-    sam_input_ch = bowtie2_out_ch.map { tuple ->
-    def (id, sam, nonhuman1, nonhuman2) = tuple
-    [id, sam]
+    
+    sam_input_ch = bowtie2_out_ch.map { t ->
+        def (id, sam, nonhuman1, nonhuman2) = t
+        tuple(id, sam)
     }
+
    
     bam_ch = SAMTOOLS_BAM2SAM(sam_input_ch)
     sorted_bam_ch = SAMTOOLS_SORT(bam_ch)
@@ -127,10 +129,13 @@ workflow  {
      * Non‑human reads → 5′ trimming
      */
 
-    nonhuman_reads_ch = bowtie2_out_ch.map { tuple ->
-    def (id, sam, nonhuman1, nonhuman2) = tuple
-    tuple(id, nonhuman1, nonhuman2)
-    }
+    
+    nonhuman_reads_ch =
+        bowtie2_out_ch.map { t ->
+            def (id, sam, nonhuman1, nonhuman2) = t
+            tuple(id, nonhuman1, nonhuman2)
+        }
+
     
     cutadapt_5p_out_ch = CUTADAPT_5PRIME(nonhuman_reads_ch)
     nonhuman_trimmed_ch = cutadapt_5p_out_ch.cutadapt_5prime
