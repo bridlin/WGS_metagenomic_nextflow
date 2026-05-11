@@ -39,8 +39,8 @@ WGS_metagenomic analysis with Kraken2
      fastq                   : ${params.fastq}
      outdir                  : ${params.outdir}
      run                     : ${params.run}
-     Kraken2_db              : ${kraken2_dbs.collect { it[0] }.join(', ')}
-     Kraken2_db_path         : ${kraken2_dbs.collect { it[1] }.join(', ')}
+     Kraken2_db              : ${params.kraken2_dbs.collect { it[0] }.join(', ')}
+     Kraken2_db_path         : ${params.kraken2_dbs.collect { it[1] }.join(', ')}
      report_dir              : ${params.report_dir}
      genome                  : ${params.genome}
 
