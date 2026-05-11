@@ -161,10 +161,10 @@ workflow  {
 
     
     kraken2_input_ch =
-        nonhuman_reads_ch
+        nonhuman_trimmed_ch
             .combine(kraken2_db_ch)
             .map { reads, db ->
-                Tuple.tuple(
+                tuple(
                     reads[0],
                     reads[1],
                     reads[2],
