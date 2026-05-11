@@ -161,8 +161,27 @@ workflow  {
                     )
                 }
     
+
+
+    kraken2_input_ch =
+        nonhuman_trimmed_ch
+            .combine(kraken2_db_ch)
+            .map { reads, db ->
+                tuple(
+                    reads[0],   // id
+                    reads[1],   // read1
+                    reads[2],   // read2
+                    db[0],      // db_name
+                    db[1]       // db_path ✅
+                )
+            }
+
+
+ 
+    
+    
     kraken2_results_ch = KRAKEN2(kraken2_input_ch)
-     
+    
     kraken2_report_ch = kraken2_results_ch.kraken_report
     kraken2_classification_ch = kraken2_results_ch.kraken_classification
 
