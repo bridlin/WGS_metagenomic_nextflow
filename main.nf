@@ -144,8 +144,12 @@ workflow  {
      */
 
 
-    kraken2_db_ch = Channel.from(params.kraken2_dbs)
-    kraken2_db_ch.view()
+    
+    kraken2_db_ch =
+        Channel
+            .from(params.kraken2_dbs)
+            .map { name, path -> tuple(name, file(path)) }
+            .ifEmpty { error "No Kraken2 databases defined" }
 
     
     
