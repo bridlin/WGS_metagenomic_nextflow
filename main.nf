@@ -63,7 +63,7 @@ workflow  {
         .fromFilePairs(params.fastq, checkIfExists: true, flat:true )
         .ifEmpty{ exit 1 , "cannot find reads files ${params.fastq}"}
         
-    reads_file_ch.view()
+    // reads_file_ch.view()
     
     /*
      * read qc and trimming
@@ -173,41 +173,43 @@ workflow  {
                 )
             }
 
-
+    test_ch = nonhuman_trimmed_ch
+        .combine(kraken2_db_ch)
     
+    test_ch.view()
     kraken2_input_ch.view()
 
  
     
     
-    kraken2_results_ch = KRAKEN2(kraken2_input_ch)
+    // kraken2_results_ch = KRAKEN2(kraken2_input_ch)
     
-    kraken2_report_ch = kraken2_results_ch.kraken_report
-    kraken2_classification_ch = kraken2_results_ch.kraken_classification
-
-
-    
-    kraken2_mqc_ch =
-        kraken2_report_ch.map { id, db_name, report_file ->
-            report_file
-        }
+    // kraken2_report_ch = kraken2_results_ch.kraken_report
+    // kraken2_classification_ch = kraken2_results_ch.kraken_classification
 
 
     
-    all_reports_ch = Channel
-        .empty()
-        .mix(
-            fastqc_raw_ch,
-            cutadapt_3p_report_ch,
-            trimmomatic_report_ch,
-            fastqc_trim_ch,
-            picard_ch,
-            cutadapt_5p_report_ch,
-            kraken2_mqc_ch
-    )
+    // kraken2_mqc_ch =
+    //     kraken2_report_ch.map { id, db_name, report_file ->
+    //         report_file
+    //     }
+
 
     
-    MULTIQC(all_reports_ch.collect())
+    // all_reports_ch = Channel
+    //     .empty()
+    //     .mix(
+    //         fastqc_raw_ch,
+    //         cutadapt_3p_report_ch,
+    //         trimmomatic_report_ch,
+    //         fastqc_trim_ch,
+    //         picard_ch,
+    //         cutadapt_5p_report_ch,
+    //         kraken2_mqc_ch
+    // )
+
+    
+    // MULTIQC(all_reports_ch.collect())
 
     
 
