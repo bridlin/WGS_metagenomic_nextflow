@@ -141,7 +141,7 @@ workflow  {
     nonhuman_trimmed_ch = cutadapt_5p_out_ch.cutadapt_5prime
     cutadapt_5p_report_ch = cutadapt_5p_out_ch.cutadapt_5p_report
 
-    cutadapt_5p_out_ch.view()
+    // cutadapt_5p_out_ch.view()
     
 
     /*
@@ -157,8 +157,8 @@ workflow  {
             .ifEmpty { error "No Kraken2 databases defined" }
 
     
-    
-
+    nonhuman_trimmed_ch.view()
+    kraken2_db_ch.view()    
     
     kraken2_input_ch =
         nonhuman_trimmed_ch
