@@ -50,7 +50,7 @@ WGS_metagenomic analysis with Kraken2
 
 
 
-workflow  {
+workflow METAGENOMIC_ANALYSIS {
  
 
     main:
