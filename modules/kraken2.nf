@@ -7,7 +7,7 @@ process KRAKEN2 {
     
     input:
     tuple val(id), path(read1), path(read2) 
-    tuple val(db_name), path(db_path)
+    tuple val(db_name), val(db_path)
     
     
     
