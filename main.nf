@@ -160,6 +160,9 @@ workflow METAGENOMIC_ANALYSIS {
     nonhuman_trimmed_ch.view()
     kraken2_db_ch.view()    
     
+    test_ch = nonhuman_trimmed_ch
+        .combine(kraken2_db_ch)
+    
     kraken2_input_ch =
         nonhuman_trimmed_ch
             .combine(kraken2_db_ch)
@@ -173,9 +176,6 @@ workflow METAGENOMIC_ANALYSIS {
                 )
             }
 
-    test_ch = nonhuman_trimmed_ch
-        .combine(kraken2_db_ch)
-    
     test_ch.view()
     kraken2_input_ch.view()
 
