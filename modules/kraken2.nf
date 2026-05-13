@@ -20,7 +20,9 @@ process KRAKEN2 {
 
         """	
 
-        
+        echo "DEBUG id=${id}"
+        echo "DEBUG read1=${read1}"
+        echo "DEBUG read2=${read2}"
         echo "DEBUG db_name=${db_name}"
         echo "DEBUG db_path=${db_path}"
 
