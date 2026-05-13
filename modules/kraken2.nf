@@ -6,7 +6,8 @@ process KRAKEN2 {
     publishDir "${params.outdir}/kraken2/${db_name}", mode: 'copy'
     
     input:
-    tuple val(id), path(read1), path(read2), val(db_name), path(db_path)
+    tuple val(id), path(read1), path(read2) 
+    tuple val(db_name), path(db_path)
     
     
     
